@@ -6,6 +6,7 @@ use Composer\IO\IOInterface;
 use Symfony\Component\Yaml\Inline;
 use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Yaml;
+use Dotenv\Dotenv;
 
 class Processor
 {
@@ -75,6 +76,14 @@ class Processor
 
         if (!is_file($config['dist-file'])) {
             throw new \InvalidArgumentException(sprintf('The dist file "%s" does not exist. Check your dist-file config or create it.', $config['dist-file']));
+        }
+
+        if (isset($config['env-file']) && !is_file($config['env-file'])) {
+            throw new \InvalidArgumentException(sprintf('The env file "%s" does not exist. Check your env-file config or create it.', $config['env-file']));
+        } elseif (isset($config['env-file']) && is_file($config['env-file'])) {
+            $envFileName = \basename($config['env-file']);
+            $dotenv = Dotenv::create(dirname($config['env-file']), $envFileName);
+            $result = $dotenv->load();
         }
 
         if (empty($config['parameter-key'])) {

@@ -87,6 +87,13 @@ class ProcessorTest extends TestCase
                 ),
                 'The existing "fixtures/invalid/invalid_existing_values.yml" file does not contain an array',
             ),
+            'missing env file' => array(
+                array(
+                    'file' => 'fixtures/invalid/invalid_existing_values.yml',
+                    'env-file' => 'fixtures/hallo'
+                ),
+                'The env file "fixtures/hallo" does not exist. Check your env-file config or create it.',
+            ),
         );
     }
 
@@ -135,6 +142,10 @@ class ProcessorTest extends TestCase
 
         if ($exists = file_exists($dataDir.'/existing.yml')) {
             $fs->copy($dataDir.'/existing.yml', $workingDir.'/'.$testCase['config']['file']);
+        }
+
+        if(isset($testCase['env-file'])) {
+            $fs->copy($dataDir.DIRECTORY_SEPARATOR.$testCase['env-file'], $workingDir.'/'.$testCase['config']['env-file']);
         }
 
         foreach ($testCase['environment'] as $var => $value) {

@@ -1,0 +1,8 @@
+title: Environment variables are read from env file
+
+config:
+    env-map:
+        foo: env_foo
+    env-file: ./fixtures/testcases/custom_env_file/env
+
+env-file: env    
